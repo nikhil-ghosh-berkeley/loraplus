@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from arguments import DataTrainingArguments, ModelArguments, TrainingArguments
 from checkpoint_utils import cleanup_checkpoints
-from custom_trainer import LoraPlusTrainer
+from loraplustrainer import LoraPlusTrainer
 from data_utils import (configure_tokenization, determine_task_type_and_labels,
                         identify_text_fields, load_data,
                         prepare_label_id_mapping, preprocess_function)
