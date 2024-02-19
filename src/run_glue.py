@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from arguments import DataTrainingArguments, ModelArguments, TrainingArguments
 from checkpoint_utils import cleanup_checkpoints
+from custom_trainer import LoraPlusTrainer
 from data_utils import (configure_tokenization, determine_task_type_and_labels,
                         identify_text_fields, load_data,
                         prepare_label_id_mapping, preprocess_function)
@@ -22,7 +23,6 @@ from transformers import (AutoConfig, AutoModelForSequenceClassification,
                           AutoTokenizer, DataCollatorWithPadding,
                           EvalPrediction, HfArgumentParser, LlamaTokenizer,
                           default_data_collator, set_seed)
-from transformers.custom_trainer import LoraPlusTrainer
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import send_example_telemetry
 
