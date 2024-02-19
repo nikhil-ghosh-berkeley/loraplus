@@ -1,14 +1,16 @@
 
-export WANDB_PROJECT=llama-7b_lora_mnli_sweep_test
+export WANDB_PROJECT=llama-7b_lora_mnli_sweep
 export TOKENIZERS_PARALLELISM=false
 
-lr=${1:-0.0001}
-lr_ratio=${2:-1}
+lr_B=${1:-0.0001}
+lr_A=${2:-0.0001}
 seed=${3:-0}
 export CUDA_VISIBLE_DEVICES=${4:-0}
 
-export WANDB_RUN_GROUP=lr_${lr}_ratio_${lr_ratio}
+export WANDB_RUN_GROUP=lrB_${lr_B}_lrA_${lr_A}
 export WANDB_NAME=${WANDB_RUN_GROUP}_seed_${seed}
+
+lr_ratio=$(awk -v lrB="$lr_B" -v lrA="$lr_A" 'BEGIN{ print lrB / lrA }')
 
 python src/run_glue.py \
     --model_name_or_path huggyllama/llama-7b \

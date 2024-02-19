@@ -17,8 +17,8 @@ for lr_B in "${lrs_B[@]}"; do
     for lr_A in "${lrs_A[@]}"; do
         for seed in "${seeds[@]}"; do
             echo "Running lr_B=${lr_B} lr_A=${lr_A} seed=${seed} on device=${device}"
-            lr_ratio=$(awk -v lrB="$lr_B" -v lrA="$lr_A" 'BEGIN{ print lrB / lrA }')
-            ./scripts/run_llama-7b_lora_mnli.sh "$lr_A" "$lr_ratio" "$seed" "$device" &
+            
+            ./scripts/run_llama-7b_lora_mnli.sh "$lr_B" "$lr_A" "$seed" "$device" &
             
             # Increment the count and calculate the next device ID
             count=$((count + 1))
