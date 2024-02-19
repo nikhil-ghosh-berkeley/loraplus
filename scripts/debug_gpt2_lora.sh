@@ -7,7 +7,7 @@ lr=5e-5
 lr_ratio=20
 
 python src/run_glue.py \
-    --model_name_or_path $HOME/storage/pretrained/gpt2 \
+    --model_name_or_path gpt2 \
     --use_lora \
     --target_modules "c_attn, c_proj, c_fc" \
     --task_name mnli \
