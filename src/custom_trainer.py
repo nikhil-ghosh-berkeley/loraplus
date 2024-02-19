@@ -1,16 +1,18 @@
 from functools import reduce
 
 import torch.nn as nn
+from logging_utils import setup_logging
 
-from transformers import Seq2SeqTrainer, Trainer
+from peft.tuners import lora
+from transformers import Trainer
 from transformers.pytorch_utils import ALL_LAYERNORM_LAYERS
 from transformers.trainer_pt_utils import get_parameter_names
 from transformers.utils import is_sagemaker_mp_enabled, logging
-from peft.tuners import lora
 
 if is_sagemaker_mp_enabled():
     import smdistributed.modelparallel.torch as smp
 
+setup_logging()
 logger = logging.get_logger(__name__)
 
 def get_module(name, opt_model):
@@ -18,7 +20,6 @@ def get_module(name, opt_model):
     module_names = name.split(sep=".")[:-parent_idx]
     module = reduce(getattr, module_names, opt_model)
     return module
-
 
 def _create_optimizer(opt_model, args):
     """
