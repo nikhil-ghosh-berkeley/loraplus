@@ -132,6 +132,10 @@ def main():
         ignore_mismatched_sizes=model_args.ignore_mismatched_sizes,
     )
 
+    if "gpt" in config.name_or_path:
+        tokenizer.pad_token = tokenizer.eos_token
+        model.config.pad_token_id = tokenizer.pad_token_id
+
     if "llama" in config.name_or_path or isinstance(tokenizer, LlamaTokenizer):
         if tokenizer._pad_token is None:
             smart_tokenizer_and_embedding_resize(
