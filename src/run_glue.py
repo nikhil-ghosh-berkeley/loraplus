@@ -297,7 +297,7 @@ def main():
 
     # Training
     if training_args.do_train:
-        train_model(trainer, training_args, data_args, train_dataset)
+        train_model(trainer, training_args, data_args, train_dataset, last_checkpoint=last_checkpoint)
 
     # Evaluation
     if training_args.do_eval:
