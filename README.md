@@ -6,7 +6,7 @@ This repository contains the code for LoRA+, introduced in [LoRA+: Efficient Low
 LoRA+ introduces one new required hyperparameter to your optimizer (and another optional hyperparameter).
 ### LoRA+ arguments
 * `loraplus_lr_ratio`: the ratio of learning rates $\eta_B / \eta_A$ where $\eta_A$ is the optimizer learning rate. Set this to a value greater than 1 for best performance. See the paper for more information.
-* `loraplus_lr_embedding`: (optional) if LoRA modules are added to embedding layers your can specify an different learning rate for them. Default value `1e-6`.
+* `loraplus_lr_embedding`: (optional) if LoRA modules are added to embedding layers your can specify a different learning rate for them. Default value `1e-6`.
 
 ### With Huggingface Trainer
 To integrate LoRA+ into a finetuning project using huggingface `Trainer` is straightforward. Just replace the `Trainer` in your project with `LoraPlusTrainer` in `loraplus.py` and pass in the LoRA+ arguments above to its `TrainingArguments`.
