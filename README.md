@@ -48,7 +48,7 @@ Check `scripts/` folder for finetuning examples with gpt2, roberta-base, and lla
 
 This code is part of the LoRA+ project. For citations, please use 
 ```
-@article{hayou2024lora,
+@article{hayou2024loraplus,
       title={LoRA+: Efficient Low Rank Adaptation of Large Models}, 
       author={Soufiane Hayou and Nikhil Ghosh and Bin Yu},
       year={2024},
