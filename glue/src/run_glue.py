@@ -9,11 +9,9 @@ import numpy as np
 import torch
 from arguments import DataTrainingArguments, ModelArguments, TrainingArguments
 from checkpoint_utils import cleanup_checkpoints
-from loraplustrainer import LoraPlusTrainer
 from data_utils import (configure_tokenization, determine_task_type_and_labels,
                         identify_text_fields, load_data,
                         prepare_label_id_mapping, preprocess_function)
-from logging_utils import setup_logging
 from model_utils import DEFAULT_PAD_TOKEN, smart_tokenizer_and_embedding_resize
 from train_utils import train_model
 
@@ -25,6 +23,13 @@ from transformers import (AutoConfig, AutoModelForSequenceClassification,
                           default_data_collator, set_seed)
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import send_example_telemetry
+
+current_dir = os.path.dirname(__file__)
+loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
+
+# Append the 'loraplus' directory to sys.path
+sys.path.append(loraplus_dir)
+from loraplus import LoraPlusTrainer
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +55,12 @@ def main():
     # information sent is the one passed as arguments along with your Python/PyTorch versions.
     send_example_telemetry("run_glue", model_args, data_args)
 
-    setup_logging()
+    logging.basicConfig(
+        format="[%(levelname)s|%(filename)s:%(lineno)d] %(asctime)s,%(msecs)03d >> %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=logging.INFO,
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
 
     # Set logging verbosity for transformers and datasets libraries to INFO
     transformers.utils.logging.set_verbosity_info()

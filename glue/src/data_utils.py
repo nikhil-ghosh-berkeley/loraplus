@@ -2,12 +2,11 @@ import logging
 import os
 
 from datasets import load_dataset, load_from_disk
-from logging_utils import setup_logging
+from transformers.utils import logging
 
 from transformers import PretrainedConfig
 
-setup_logging()
-logger = logging.getLogger(__name__)
+logger = logging.get_logger(__name__)
 
 task_to_keys = {
     "cola": ("sentence", None),

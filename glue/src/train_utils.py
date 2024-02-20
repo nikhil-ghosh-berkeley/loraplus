@@ -1,10 +1,9 @@
 import sys
 import logging
 import traceback
-from logging_utils import setup_logging
 
-setup_logging()
-logger = logging.getLogger(__name__)
+from transformers.utils import logging
+logger = logging.get_logger(__name__)
 
 def attempt_train(trainer, checkpoint):
     """

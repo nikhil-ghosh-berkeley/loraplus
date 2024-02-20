@@ -18,7 +18,7 @@ for lr_B in "${lrs_B[@]}"; do
         for seed in "${seeds[@]}"; do
             echo "Running lr_B=${lr_B} lr_A=${lr_A} seed=${seed} on device=${device}"
             
-            ./scripts/run_llama-7b_lora_mnli.sh "$lr_B" "$lr_A" "$seed" "$device" &
+            ./scripts/exec_llama-7b_lora_mnli.sh "$lr_B" "$lr_A" "$seed" "$device" &
             
             # Increment the count and calculate the next device ID
             count=$((count + 1))

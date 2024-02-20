@@ -1,10 +1,8 @@
 import logging
 import shutil
 
-from logging_utils import setup_logging
-
-setup_logging()
-logger = logging.getLogger(__name__)
+from transformers.utils import logging
+logger = logging.get_logger(__name__)
 
 
 def delete_checkpoint(checkpoint_dir):
