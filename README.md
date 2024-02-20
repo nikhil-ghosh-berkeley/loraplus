@@ -1,6 +1,6 @@
 # LoRA+
 
-This repository contains the code for LoRA+, introduced in "LoRA+: Efficient Low Rank Adaptation of Large Models".
+This repository contains the code for LoRA+, introduced in [LoRA+: Efficient Low Rank Adaptation of Large Models](https://arxiv.org/abs/2402.12354).
 
 ## Usage
 LoRA+ introduces one new required hyperparameter to your optimizer (and another optional hyperparameter).
