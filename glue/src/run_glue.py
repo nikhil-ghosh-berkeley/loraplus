@@ -7,7 +7,7 @@ import datasets
 import evaluate
 import numpy as np
 import torch
-from arguments import DataTrainingArguments, ModelArguments, TrainingArguments
+from arguments import DataTrainingArguments, ModelArguments
 from checkpoint_utils import cleanup_checkpoints
 from data_utils import (configure_tokenization, determine_task_type_and_labels,
                         identify_text_fields, load_data,
@@ -29,7 +29,7 @@ loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
 
 # Append the 'loraplus' directory to sys.path
 sys.path.append(loraplus_dir)
-from loraplus import LoraPlusTrainer
+from loraplus import LoraPlusTrainer, LoraPlusTrainingArguments
 
 logger = logging.getLogger(__name__)
 

@@ -1,10 +1,17 @@
+from dataclasses import dataclass, field
 from functools import reduce
+from typing import Callable, Dict, List, Optional, Tuple, Union
 
+import torch
 import torch.nn as nn
+from torch.utils.data import Dataset
 
 from peft.tuners import lora
-from transformers import Trainer
+from transformers import Trainer, TrainingArguments
+from transformers.data.data_collator import DataCollator
 from transformers.pytorch_utils import ALL_LAYERNORM_LAYERS
+from transformers.trainer import (EvalPrediction, PreTrainedModel,
+                                  PreTrainedTokenizerBase, TrainerCallback)
 from transformers.trainer_pt_utils import get_parameter_names
 from transformers.utils import is_sagemaker_mp_enabled, logging
 
@@ -12,6 +19,44 @@ if is_sagemaker_mp_enabled():
     import smdistributed.modelparallel.torch as smp
 
 logger = logging.get_logger(__name__)
+
+@dataclass
+class LoraPlusTrainingArguments(TrainingArguments):
+    do_train: bool = field(default=True, metadata={"help": "Whether to run training."})
+    do_eval: bool = field(
+        default=True, metadata={"help": "Whether to run eval on the dev set."}
+    )
+    keep_checkpoints: str = field(
+        default="all",
+        metadata={"help": "keep all, eval, or none checkpoints after end of training"},
+    )
+    lora_rank: int = field(default=8, metadata={"help": "LoRA rank r"})
+    lora_alpha: float = field(default=16, metadata={"help": "LoRA alpha parameter"})
+    lora_dropout: float = field(
+        default=0.1, metadata={"help": "dropout rate for LoRA modules"}
+    )
+    target_modules: Optional[str] = field(
+        default=None, metadata={"help": "which modules to add LoRA layer to"}
+    )
+    use_lora: bool = field(
+        default=True, metadata={"help": "whether to finetune using LoRA"}
+    )
+    lora_use_original_init: bool = field(
+        default=False,
+        metadata={"help": "whether to use the original LoRA initialization"},
+    )
+    bf16: bool = field(default=False, metadata={"help": "use bfloat16"})
+    fp16: bool = field(default=False, metadata={"help": "use bfloat16"})
+    gradient_checkpointing: bool = field(
+        default=False, metadata={"help": "use gradient checkpointing"}
+    )
+    loraplus_lr_ratio: Optional[float] = field(
+        default=None, metadata={"help": "loraplus learning rate ratio lr_B / lr_A."}
+    )
+    loraplus_lr_embedding: Optional[float] = field(
+        default=1e-6, metadata={"help": "loraplus learning rate for lora embedding layers."}
+    )
+
 
 def get_module(name, opt_model):
     """
@@ -49,7 +94,7 @@ def create_loraplus_optimizer(
         An instance of the specified optimizer class configured with the model's parameters organized into groups with custom learning rates.
     """
 
-    assert loraplus_lr_ratio is not None
+    assert loraplus_lr_ratio is not None, "loraplus_lr_ratio must be provided."
 
     if loraplus_lr_embedding is None:
         loraplus_lr_embedding = 1e-6
@@ -129,6 +174,35 @@ def create_loraplus_optimizer(
     return optimizer
 
 class LoraPlusTrainer(Trainer):
+    def __init__(
+        self,
+        model: Union[PreTrainedModel, nn.Module] = None,
+        args: LoraPlusTrainingArguments = None,
+        data_collator: Optional[DataCollator] = None,
+        train_dataset: Optional[Dataset] = None,
+        eval_dataset: Optional[Union[Dataset, Dict[str, Dataset]]] = None,
+        tokenizer: Optional[PreTrainedTokenizerBase] = None,
+        model_init: Optional[Callable[[], PreTrainedModel]] = None,
+        compute_metrics: Optional[Callable[[EvalPrediction], Dict]] = None,
+        callbacks: Optional[List[TrainerCallback]] = None,
+        optimizers: Tuple[torch.optim.Optimizer, torch.optim.lr_scheduler.LambdaLR] = (None, None),
+        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+    ):
+        assert isinstance(args, LoraPlusTrainingArguments), "args must be of type LoraPlusTrainingArguments"
+        super().__init__(
+            model,
+            args,
+            data_collator,
+            train_dataset,
+            eval_dataset,
+            tokenizer,
+            model_init,
+            compute_metrics,
+            callbacks,
+            optimizers,
+            preprocess_logits_for_metrics,
+        )
+
     def create_optimizer(self):
         """
         Overrides the method to create an optimizer with LoRA+ specific adjustments.

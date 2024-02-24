@@ -181,39 +181,3 @@ class ModelArguments:
         },
     )
 
-@dataclass
-class TrainingArguments(transformers.TrainingArguments):
-    do_train: bool = field(default=True, metadata={"help": "Whether to run training."})
-    do_eval: bool = field(
-        default=True, metadata={"help": "Whether to run eval on the dev set."}
-    )
-    keep_checkpoints: str = field(
-        default="all",
-        metadata={"help": "keep all, eval, or none checkpoints after end of training"},
-    )
-    lora_rank: int = field(default=8, metadata={"help": "LoRA rank r"})
-    lora_alpha: float = field(default=16, metadata={"help": "LoRA alpha parameter"})
-    lora_dropout: float = field(
-        default=0.1, metadata={"help": "dropout rate for LoRA modules"}
-    )
-    target_modules: Optional[str] = field(
-        default=None, metadata={"help": "which modules to add LoRA layer to"}
-    )
-    use_lora: bool = field(
-        default=True, metadata={"help": "whether to finetune using LoRA"}
-    )
-    lora_use_original_init: bool = field(
-        default=False,
-        metadata={"help": "whether to use the original LoRA initialization"},
-    )
-    bf16: bool = field(default=False, metadata={"help": "use bfloat16"})
-    fp16: bool = field(default=False, metadata={"help": "use bfloat16"})
-    gradient_checkpointing: bool = field(
-        default=False, metadata={"help": "use gradient checkpointing"}
-    )
-    loraplus_lr_ratio: Optional[float] = field(
-        default=None, metadata={"help": "loraplus learning rate ratio lr_B / lr_A."}
-    )
-    loraplus_lr_embedding: Optional[float] = field(
-        default=1e-6, metadata={"help": "loraplus learning rate for lora embedding layers."}
-    )

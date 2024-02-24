@@ -1,3 +1,5 @@
 output
 __pycache__
+.ipynb_checkpoints
 wandb
+vit*/
