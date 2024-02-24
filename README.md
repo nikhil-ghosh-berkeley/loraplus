@@ -6,7 +6,7 @@ This repository contains the code for LoRA+, introduced in [LoRA+: Efficient Low
 LoRA+ introduces one new required hyperparameter to your optimizer (and another optional hyperparameter). Setting this hyperparameter appropriately can improve finetuning performance, especially on more challenging downstream tasks.
 ### LoRA+ arguments
 * `loraplus_lr_ratio`: the ratio of learning rates $\eta_B / \eta_A$ where $\eta_A$ is passed in as the optimizer learning rate (e.g., `learning_rate` or `lr`). See the note below for some advice on how to set this.
-* `loraplus_lr_embedding`: (optional) if LoRA modules are added to embedding layers your can specify an different learning rate for them. Default value `1e-6`.
+* `loraplus_lr_embedding`: (optional) if LoRA modules are added to embedding layers your can specify a different learning rate for them. Default value `1e-6`.
 
 **NOTE**: 
 `loraplus_lr_ratio` should be $\geq 1$, but the optimal choice of `loraplus_lr_ratio` is 
