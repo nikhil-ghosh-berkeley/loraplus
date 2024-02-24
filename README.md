@@ -3,16 +3,28 @@
 This repository contains the code for LoRA+, introduced in [LoRA+: Efficient Low Rank Adaptation of Large Models](https://arxiv.org/abs/2402.12354).
 
 ## Usage
-LoRA+ introduces one new required hyperparameter to your optimizer (and another optional hyperparameter).
+LoRA+ introduces one new required hyperparameter to your optimizer (and another optional hyperparameter). Setting this hyperparameter appropriately can improve finetuning performance, especially on more challenging downstream tasks.
 ### LoRA+ arguments
-* `loraplus_lr_ratio`: the ratio of learning rates $\eta_B / \eta_A$ where $\eta_A$ is the optimizer learning rate. Set this to a value greater than 1 for best performance. See the paper for more information.
+* `loraplus_lr_ratio`: the ratio of learning rates $\eta_B / \eta_A$ where $\eta_A$ is passed in as the optimizer learning rate (e.g., `learning_rate` or `lr`). See the note below for some advice on how to set this.
 * `loraplus_lr_embedding`: (optional) if LoRA modules are added to embedding layers your can specify an different learning rate for them. Default value `1e-6`.
 
-### With Huggingface Trainer
-To integrate LoRA+ into a finetuning project using huggingface `Trainer` is straightforward. Just replace the `Trainer` in your project with `LoraPlusTrainer` in `loraplus.py` and pass in the LoRA+ arguments above to its `TrainingArguments`.
+**NOTE**: 
+`loraplus_lr_ratio` should be $\geq 1$, but the optimal choice of `loraplus_lr_ratio` is 
+1. model and task dependent.
+2. needs to be set in tandem with the optimizer learning rate (i.e., $\eta_A$).
+   
+As a rule of thumb, `loraplus_lr_ratio` should be larger when the task is more difficult and the model needs to update its features to learn well. In this case, it helps to make the learning rate $\eta_A$ slightly smaller (e.g., by a factor of 2) than typical vanilla LoRA learning rates. Please see the [paper](https://arxiv.org/abs/2402.12354) for examples.
 
-### No Trainer
-For training with LoRA+ without `Trainer` you can just use an optimizer created with the `create_loraplus_optimizer` function in `loraplus.py`. This function wraps an optimizer class and sets the learning rates of your model parameters appropriately for the optimizer. 
+### Code
+The code for using LoRA+ can be found in `loraplus.py`.
+
+**With Huggingface Trainer**
+
+To integrate LoRA+ into a finetuning project using huggingface `Trainer` is straightforward. Just replace the `Trainer` in your project with `LoraPlusTrainer` and pass in the training arguments (including LoRA+ arguments) using `LoraPlusTrainingArguments`. See the `image_classification.ipynb` notebook for an example.
+
+**No Trainer**
+
+For training with LoRA+ without `Trainer` you can just use an optimizer created with the `create_loraplus_optimizer` function. This function wraps an optimizer class and sets the learning rates of your model parameters appropriately for the optimizer. 
 
 ```python
 import torch
@@ -27,7 +39,7 @@ optimizer = _create_optimizer(model, optimizer_cls, optimizer_kwargs, loraplus_r
 ```
 
 ## Examples
-In the `glue/` folder we have code for finetuning models on GLUE using LoRA+. 
+In the `glue/` folder we have code for finetuning models on GLUE using LoRA+ which can be used to reproduce results in the paper. We also include a notebook `image_classification.ipynb` for demonstrating code usage.
 
 ### Requirements
 To run the code, first install the requirements using:
