@@ -1,4 +1,5 @@
 torch==2.1.2
+torchvision==0.16.2
 transformers==4.37.2
 git+https://github.com/nikhil-ghosh-berkeley/peft.git@loraplus#egg=peft
 datasets==2.17.0
