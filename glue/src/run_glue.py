@@ -24,12 +24,15 @@ from transformers import (AutoConfig, AutoModelForSequenceClassification,
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import send_example_telemetry
 
+# Current file directory
 current_dir = os.path.dirname(__file__)
-loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
+
+# Calculate the path to the 'loraplus' directory
+loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
 
 # Append the 'loraplus' directory to sys.path
 sys.path.append(loraplus_dir)
-from loraplus import LoraPlusTrainer, LoraPlusTrainingArguments
+from loraplus.loraplus import LoraPlusTrainer, LoraPlusTrainingArguments
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +43,7 @@ def main():
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
     parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, TrainingArguments)
+        (ModelArguments, DataTrainingArguments, LoraPlusTrainingArguments)
     )
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
