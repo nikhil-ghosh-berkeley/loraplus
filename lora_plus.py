@@ -126,7 +126,7 @@ def create_loraplus_optimizer(
     assigned_param_groups = ""
     for group in param_groups:
         assigned_param_groups += f"{group}\n {list(param_groups[group].keys())}\n\n"
-    logger.debug(assigned_param_groups)
+    logger.info(assigned_param_groups)
 
     lr = optimizer_kwargs["lr"]
     weight_decay = optimizer_kwargs.get("weight_decay", 0.0)

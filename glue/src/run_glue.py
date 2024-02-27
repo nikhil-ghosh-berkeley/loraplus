@@ -28,11 +28,11 @@ from transformers.utils import send_example_telemetry
 current_dir = os.path.dirname(__file__)
 
 # Calculate the path to the 'loraplus' directory
-loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
+loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
 
 # Append the 'loraplus' directory to sys.path
 sys.path.append(loraplus_dir)
-from loraplus.loraplus import LoraPlusTrainer, LoraPlusTrainingArguments
+from lora_plus import LoraPlusTrainer, LoraPlusTrainingArguments
 
 logger = logging.getLogger(__name__)
 
