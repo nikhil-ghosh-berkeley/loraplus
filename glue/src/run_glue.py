@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from arguments import DataTrainingArguments, ModelArguments
 from checkpoint_utils import cleanup_checkpoints
-from constants import DEFAULT_PAD_TOKEN
+from constants import DEFAULT_PAD_TOKEN, task_to_keys
 from datasets import load_dataset, load_from_disk
 from model_utils import smart_tokenizer_and_embedding_resize
 from train_utils import train_model
@@ -32,18 +32,6 @@ loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
 # Append the 'loraplus' directory to sys.path
 sys.path.append(loraplus_dir)
 from lora_plus import LoraPlusTrainer, LoraPlusTrainingArguments
-
-task_to_keys = {
-    "cola": ("sentence", None),
-    "mnli": ("premise", "hypothesis"),
-    "mrpc": ("sentence1", "sentence2"),
-    "qnli": ("question", "sentence"),
-    "qqp": ("question1", "question2"),
-    "rte": ("sentence1", "sentence2"),
-    "sst2": ("sentence", None),
-    "stsb": ("sentence1", "sentence2"),
-    "wnli": ("sentence1", "sentence2"),
-}
 
 logger = logging.getLogger(__name__)
 
