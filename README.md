@@ -16,7 +16,7 @@ LoRA+ introduces one new required hyperparameter to your optimizer (and another 
 As a rule of thumb, `loraplus_lr_ratio` should be larger when the task is more difficult and the model needs to update its features to learn well. In this case, it helps to make the learning rate $\eta_A$ slightly smaller (e.g., by a factor of 2) than typical vanilla LoRA learning rates. Please see the [paper](https://arxiv.org/abs/2402.12354) for examples.
 
 ### Code
-The code for using LoRA+ can be found in `loraplus.py`.
+The code for using LoRA+ can be found in `lora_plus.py`.
 
 **With Huggingface Trainer**
 
@@ -35,7 +35,7 @@ model = ...
 optimizer_cls = torch.optim.AdamW
 optimizer_kwargs = {'lr': 5e-5, 'eps': 1e-6, 'betas': (0.9, 0.999), 'weight_decay': 0.0}
 loraplus_lr_ratio = 20.0
-optimizer = _create_optimizer(model, optimizer_cls, optimizer_kwargs, loraplus_ratio):
+optimizer = create_loraplus_optimizer(model, optimizer_cls, optimizer_kwargs, loraplus_ratio):
 ```
 
 ## Examples
