@@ -7,8 +7,8 @@ export CUDA_VISIBLE_DEVICES=0
 # Experiment configuration
 task=mnli
 exp_name=roberta_lora_$task
-lr=1e-4
-lr_ratio=20
+lr=5e-5
+lr_ratio=40
 
 # Execute command
 python src/run_glue.py \
