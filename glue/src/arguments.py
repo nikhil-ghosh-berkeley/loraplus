@@ -1,8 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
-from data_utils import task_to_keys
 
-import transformers
+from constants import task_to_keys
 
 
 @dataclass

@@ -2,7 +2,6 @@ from typing import Dict
 
 import transformers
 
-DEFAULT_PAD_TOKEN = "[PAD]"
 
 def smart_tokenizer_and_embedding_resize(
     special_tokens_dict: Dict,
