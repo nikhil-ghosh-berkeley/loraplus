@@ -35,7 +35,7 @@ model = ...
 optimizer_cls = torch.optim.AdamW
 optimizer_kwargs = {'lr': 5e-5, 'eps': 1e-6, 'betas': (0.9, 0.999), 'weight_decay': 0.0}
 loraplus_lr_ratio = 20.0
-optimizer = _create_optimizer(model, optimizer_cls, optimizer_kwargs, loraplus_ratio):
+optimizer = create_loraplus_optimizer(model, optimizer_cls, optimizer_kwargs, loraplus_ratio):
 ```
 
 ## Examples
