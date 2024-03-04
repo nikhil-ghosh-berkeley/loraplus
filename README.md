@@ -67,3 +67,6 @@ This code is part of the LoRA+ project. For citations, please use
       journal={arXiv 2402.12354}
 }
 ```
+
+## Acknowledgements
+We thank Amazon Web Services (AWS) for providing the compute for this project through cloud credits under an Amazon Research Award.
