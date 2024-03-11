@@ -7,7 +7,7 @@ import datasets
 import evaluate
 import numpy as np
 import torch
-from arguments import DataTrainingArguments, ModelArguments
+from arguments import DataTrainingArguments, ModelArguments, TrainingArguments
 from checkpoint_utils import cleanup_checkpoints
 from constants import DEFAULT_PAD_TOKEN, task_to_keys
 from datasets import load_dataset, load_from_disk
@@ -27,11 +27,11 @@ from transformers.utils import send_example_telemetry
 current_dir = os.path.dirname(__file__)
 
 # Calculate the path to the 'loraplus' directory
-loraplus_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
+loraplus_dir = os.path.abspath(os.path.join(current_dir, "..", ".."))
 
 # Append the 'loraplus' directory to sys.path
 sys.path.append(loraplus_dir)
-from lora_plus import LoraPlusTrainer, LoraPlusTrainingArguments
+from lora_plus import LoraPlusTrainer
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def main():
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
     parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, LoraPlusTrainingArguments)
+        (ModelArguments, DataTrainingArguments, TrainingArguments)
     )
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
@@ -470,7 +470,13 @@ def main():
 
     # Training
     if training_args.do_train:
-        train_model(trainer, training_args, data_args, train_dataset, last_checkpoint=last_checkpoint)
+        train_model(
+            trainer,
+            training_args,
+            data_args,
+            train_dataset,
+            last_checkpoint=last_checkpoint,
+        )
 
     # Evaluation
     if training_args.do_eval:

@@ -20,41 +20,15 @@ if is_sagemaker_mp_enabled():
 
 logger = logging.get_logger(__name__)
 
+
 @dataclass
 class LoraPlusTrainingArguments(TrainingArguments):
-    do_train: bool = field(default=True, metadata={"help": "Whether to run training."})
-    do_eval: bool = field(
-        default=True, metadata={"help": "Whether to run eval on the dev set."}
-    )
-    keep_checkpoints: str = field(
-        default="all",
-        metadata={"help": "keep all, eval, or none checkpoints after end of training"},
-    )
-    lora_rank: int = field(default=8, metadata={"help": "LoRA rank r"})
-    lora_alpha: float = field(default=16, metadata={"help": "LoRA alpha parameter"})
-    lora_dropout: float = field(
-        default=0.1, metadata={"help": "dropout rate for LoRA modules"}
-    )
-    target_modules: Optional[str] = field(
-        default=None, metadata={"help": "which modules to add LoRA layer to"}
-    )
-    use_lora: bool = field(
-        default=True, metadata={"help": "whether to finetune using LoRA"}
-    )
-    lora_use_original_init: bool = field(
-        default=False,
-        metadata={"help": "whether to use the original LoRA initialization"},
-    )
-    bf16: bool = field(default=False, metadata={"help": "use bfloat16"})
-    fp16: bool = field(default=False, metadata={"help": "use bfloat16"})
-    gradient_checkpointing: bool = field(
-        default=False, metadata={"help": "use gradient checkpointing"}
-    )
     loraplus_lr_ratio: Optional[float] = field(
         default=None, metadata={"help": "loraplus learning rate ratio lr_B / lr_A."}
     )
     loraplus_lr_embedding: Optional[float] = field(
-        default=1e-6, metadata={"help": "loraplus learning rate for lora embedding layers."}
+        default=1e-6,
+        metadata={"help": "loraplus learning rate for lora embedding layers."},
     )
 
 
@@ -73,6 +47,7 @@ def get_module(name, opt_model):
     module = reduce(getattr, module_names, opt_model)
     return module
 
+
 def create_loraplus_optimizer(
     opt_model,
     optimizer_cls,
@@ -82,14 +57,14 @@ def create_loraplus_optimizer(
 ):
     """
     Creates an optimizer for the given model, applying LoRA-specific learning rate adjustments to different parameter groups.
-    
+
     Args:
         opt_model (torch.nn.Module): The model for which the optimizer is being created.
         optimizer_cls (class): The class of the optimizer to be used (e.g., torch.optim.Adam).
         optimizer_kwargs (dict): A dictionary of keyword arguments for the optimizer's initialization.
         loraplus_lr_ratio (float): The learning rate ratio to be applied to LoRA parameters.
         loraplus_lr_embedding (float, optional): A specific learning rate for embedding parameters, with a default value if not provided.
-    
+
     Returns:
         An instance of the specified optimizer class configured with the model's parameters organized into groups with custom learning rates.
     """
@@ -173,6 +148,7 @@ def create_loraplus_optimizer(
 
     return optimizer
 
+
 class LoraPlusTrainer(Trainer):
     def __init__(
         self,
@@ -185,10 +161,17 @@ class LoraPlusTrainer(Trainer):
         model_init: Optional[Callable[[], PreTrainedModel]] = None,
         compute_metrics: Optional[Callable[[EvalPrediction], Dict]] = None,
         callbacks: Optional[List[TrainerCallback]] = None,
-        optimizers: Tuple[torch.optim.Optimizer, torch.optim.lr_scheduler.LambdaLR] = (None, None),
-        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
+        optimizers: Tuple[torch.optim.Optimizer, torch.optim.lr_scheduler.LambdaLR] = (
+            None,
+            None,
+        ),
+        preprocess_logits_for_metrics: Optional[
+            Callable[[torch.Tensor, torch.Tensor], torch.Tensor]
+        ] = None,
     ):
-        assert isinstance(args, LoraPlusTrainingArguments), "args must be of type LoraPlusTrainingArguments"
+        assert isinstance(
+            args, LoraPlusTrainingArguments
+        ), "args must be of type LoraPlusTrainingArguments"
         super().__init__(
             model,
             args,
@@ -216,8 +199,8 @@ class LoraPlusTrainer(Trainer):
                 self.args
             )
 
-            loraplus_lr_ratio = getattr(self.args, 'loraplus_lr_ratio', None)
-            loraplus_lr_embedding = getattr(self.args, 'loraplus_lr_embedding', None)
+            loraplus_lr_ratio = getattr(self.args, "loraplus_lr_ratio", None)
+            loraplus_lr_embedding = getattr(self.args, "loraplus_lr_embedding", None)
             self.optimizer = create_loraplus_optimizer(
                 opt_model,
                 optimizer_cls,

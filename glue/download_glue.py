@@ -5,10 +5,11 @@ from typing import Iterable, Union
 
 glue_tasks = {"cola", "mnli", "mrpc", "qnli", "qqp", "rte", "sst2", "stsb", "wnli"}
 
+
 # example usage: python download_glue.py --task_names mnli,qqp --data_dir /scratch/users/nikhil_ghosh
 def download_glue_tasks(task_names: Union[str, Iterable[str]], data_dir: str = "data"):
     print(f"downloading tasks: {str(task_names)}")
-    
+
     if isinstance(task_names, str):
         task_names = [task_names]
 

@@ -1,7 +1,19 @@
+import os
+import sys
 from dataclasses import dataclass, field
 from typing import Optional
 
 from constants import task_to_keys
+
+# Current file directory
+current_dir = os.path.dirname(__file__)
+
+# Calculate the path to the 'loraplus' directory
+loraplus_dir = os.path.abspath(os.path.join(current_dir, "..", ".."))
+
+# Append the 'loraplus' directory to sys.path
+sys.path.append(loraplus_dir)
+from lora_plus import LoraPlusTrainingArguments
 
 
 @dataclass
@@ -180,3 +192,34 @@ class ModelArguments:
         },
     )
 
+
+@dataclass
+class TrainingArguments(LoraPlusTrainingArguments):
+    do_train: bool = field(default=True, metadata={"help": "Whether to run training."})
+    do_eval: bool = field(
+        default=True, metadata={"help": "Whether to run eval on the dev set."}
+    )
+    keep_checkpoints: str = field(
+        default="all",
+        metadata={"help": "keep all, eval, or none checkpoints after end of training"},
+    )
+    lora_rank: int = field(default=8, metadata={"help": "LoRA rank r"})
+    lora_alpha: float = field(default=16, metadata={"help": "LoRA alpha parameter"})
+    lora_dropout: float = field(
+        default=0.1, metadata={"help": "dropout rate for LoRA modules"}
+    )
+    target_modules: Optional[str] = field(
+        default=None, metadata={"help": "which modules to add LoRA layer to"}
+    )
+    use_lora: bool = field(
+        default=True, metadata={"help": "whether to finetune using LoRA"}
+    )
+    lora_use_original_init: bool = field(
+        default=False,
+        metadata={"help": "whether to use the original LoRA initialization"},
+    )
+    bf16: bool = field(default=False, metadata={"help": "use bfloat16"})
+    fp16: bool = field(default=False, metadata={"help": "use bfloat16"})
+    gradient_checkpointing: bool = field(
+        default=False, metadata={"help": "use gradient checkpointing"}
+    )
