@@ -51,7 +51,7 @@ pip install -r requirements.txt
 
 Download the glue tasks using e.g. :
 ```
-python download_glue.py --task_names mnli,qqp --datadir data/
+python download_glue.py --task_names mnli,qqp --data_dir data/
 ```
 
 Check `scripts/` folder for finetuning examples with gpt2, roberta-base, and llama-7b.
