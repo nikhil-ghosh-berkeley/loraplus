@@ -8,14 +8,14 @@ export CUDA_VISIBLE_DEVICES=0
 task=mnli
 exp_name=roberta_lora_$task
 lr=5e-5
-lr_ratio=40
+lr_ratio=80
 
 # Execute command
 python src/run_glue.py \
   --model_name_or_path roberta-base \
   --task_name $task \
   --use_lora \
-  --target_modules "query, key" \
+  --target_modules "query, value" \
   --do_train \
   --per_device_train_batch_size 32 \
   --per_device_eval_batch_size 128 \
