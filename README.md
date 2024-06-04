@@ -2,6 +2,9 @@
 
 This repository contains the code for LoRA+, introduced in [LoRA+: Efficient Low Rank Adaptation of Large Models](https://arxiv.org/abs/2402.12354).
 
+## News
+LoRA+ is now accepted at ICML 2024!
+
 ## Usage
 LoRA+ introduces one new required hyperparameter to your optimizer (and another optional hyperparameter). Setting this hyperparameter appropriately can improve finetuning performance, especially on more challenging downstream tasks.
 ### LoRA+ arguments
