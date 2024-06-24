@@ -2,7 +2,7 @@
 
 # Environment setup
 export TOKENIZERS_PARALLELISM=false
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=1
 
 # Experiment configuration
 task=mnli
@@ -41,4 +41,6 @@ python src/run_glue.py \
   --keep_checkpoints eval \
   --overwrite_output_dir \
   --ignore_mismatched_sizes \
+  --seed 1 \
+  --lora_use_original_init \
   --save_total_limit 1

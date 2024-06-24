@@ -2,7 +2,7 @@
 
 # Environment setup
 export TOKENIZERS_PARALLELISM=false
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=1
 
 # Experiment configuration
 task=mnli
